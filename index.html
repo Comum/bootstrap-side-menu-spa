@@ -9,6 +9,12 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
     </head>
     <body>
+        <style>
+            .display-none {
+                display: none;
+            }
+        </style>
+
         <div id="wrapper">
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
@@ -247,7 +253,7 @@
                                 <!-- /input-group -->
                             </li>
                             <li>
-                                <a href="#" class="js-router-hook" data-page-name="dashboard">
+                                <a href="#" class="js-mock-router-hook" data-page-name="dashboard">
                                     <i class="fa fa-dashboard fa-fw"></i> Dashboard
                                 </a>
                             </li>
@@ -255,10 +261,10 @@
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level collapse">
                                     <li>
-                                        <a href="flot.html">Flot Charts</a>
+                                        <a href="#" class="js-mock-router-hook" data-page-name="flot">Flot Charts</a>
                                     </li>
                                     <li>
-                                        <a href="morris.html">Morris.js Charts</a>
+                                        <a href="#" class="js-mock-router-hook" data-page-name="moris">Morris.js Charts</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
@@ -341,8 +347,16 @@
                 </div>
                 <!-- /.navbar-static-side -->
             </nav>
-            <div id="page-wrapper" class="js-page-content">
-
+            <div id="page-wrapper" class="js-page-container">
+                <div class="page-content display-none js-page-content" data-page-name="dashboard">
+                    Dashboard content goes here
+                </div>
+                <div class="page-content display-none js-page-content" data-page-name="flot">
+                    Flot chart content goes here
+                </div>
+                <div class="page-content display-none js-page-content" data-page-name="moris">
+                    Moris.js chart content goes here
+                </div>
             </div>
         </div>
 
@@ -356,10 +370,24 @@
         <script>
             function loadPage() {
                 var pageName = $(this).attr('data-page-name');
-                console.log(pageName);
+                var $differentePages = $('.js-page-content');
+
+                $differentePages.each(function () {
+                    if ($(this).hasClass('is-visible')) {
+                        $(this)
+                            .removeClass('is-visible')
+                            .addClass('display-none');
+                    }
+
+                    if ($(this).attr('data-page-name') === pageName) {
+                        $(this)
+                            .addClass('is-visible')
+                            .removeClass('display-none');
+                    }
+                });
             }
 
-            $('.js-router-hook').on('click', loadPage);
+            $('.js-mock-router-hook').on('click', loadPage);
         </script>
     </body>
 </html>
