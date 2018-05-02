@@ -1,0 +1,455 @@
+<div xmlns:atl='http://www.oilspace.com/atl'>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"></link>
+<link rel="stylesheet" type="text/css" href="https://cdn.oesmith.co.uk/morris-0.5.1.css"></link>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js"></script>
+
+<script>
+    function numberComparison(left, right) {'{'}
+        var diff;
+
+        if (left === right) {'{'}
+            return 0;
+        {'}'}
+
+        diff = left - right;
+        if (diff.toString()[0] === '-') {'{'}
+            return 1;
+        {'}'}
+
+        return -1;
+    {'}'}
+</script>
+
+<style>
+.olapTitle {'{'}
+  height: 25px !important;
+{'}'}
+.tableContainer {'{'}
+  height: 100%;
+  overflow: auto;
+{'}'}
+table {'{'}
+  height: calc(100% - 52px);
+  width: 100%;
+{'}'}
+td {'{'}
+  text-align: center;
+  height: 1em !important;
+{'}'}
+.cursor-pointer {'{'}
+  cursor: pointer;
+{'}'}
+.detailsContainer {'{'}
+  width: 100%;
+  height: calc(40% - 25px);
+{'}'}
+.visibility-hidden {'{'}
+  display: none;
+{'}'}
+</style>
+
+<div class="row" style="height: calc(60% - 25px)">
+
+
+<div class="col-sm-6 text-center"  style="height: 100%">
+
+       <label class="label label-success">Position Overview</label>
+      <div id="bar-chart" ></div>
+
+</div>
+
+
+<div class="tableContainer panel panel-default compact col-sm-6">
+    <div></div>
+    <div>
+  <table width="100%" class="compact js-table-hook" id="dataTables-example">
+
+    <thead>
+      <tr>
+        <th>Customer Name</th>
+        <th>Country 
+        </th>
+        <th>Unpaid Invoice Amount (EUR)</th>
+      </tr>
+    </thead>
+<script>
+    var data = [];
+    var i=0;
+</script>
+<div xmlns:atl='http://www.oilspace.com/atl'>
+  <atl:repeat select='testHTML()'>
+<script>
+ 
+  data.push({'{'}
+    {str}
+  {'}'});
+  var l= {label}
+console.log(typeof l);
+</script>
+  </atl:repeat>
+</div>
+  </table>
+
+    </div>
+</div>
+</div>
+
+
+
+<div class="detailsContainer">
+<span>Details Area</span>
+<span class="js-item-address"></span>
+<br></br>
+<br></br>
+
+<form>
+  Address:
+  <span class="js-item-address"></span><input type="text" name="address" class="js-item-address"></input><br></br>
+  Phone:
+  <span class="js-item-phone"></span><input type="text" name="phone" class="js-item-phone"></input>
+</form>
+
+</div>
+
+<script>
+    $(document).ready(function() {'{'}
+console.log($(window).height());
+$(window).on('resize', function () {'{'}
+  console.log($(window).height());
+{'}'});
+        $('#dataTables-example').DataTable({'{'}
+            responsive: false,
+            paging:   true,
+            ordering: true,
+            info:     false
+        {'}'});
+    {'}'});
+</script>
+
+
+
+
+<script>
+    $(document).ready(function() {'{'}
+
+var config = {'{'}
+    data: data,
+    xkey: 'y',
+    ykeys: l,
+    labels: l,
+    fillOpacity: 0.6,
+    hideHover: 'auto',
+    behaveLikeLine: true,
+    resize: true,
+    pointFillColors:['#ffffff'],
+    pointStrokeColors: ['black'],
+    lineColors:['gray','red'],
+    stacked:true
+{'}'};
+config.element = 'bar-chart';
+Morris.Bar(config);
+
+    {'}'});
+</script>
+
+
+
+
+
+<script>
+
+
+(function () {'{'}
+    var $orderingHook = $('.js-order-hook');
+    var $showKeyWordFilterTag = $('.js-show-key-word-filter');
+    var $keyWordFilterContainer = $('.js-key-word-filter-container');
+    var $keyWordFilter = $('.js-key-word-filter');
+    
+    var tableHook = 'js-table-hook';
+    var tableTrs = tableHook + ' tbody tr';
+    var arrowDown;
+    var arrowUp;
+
+    function numberComparison(left, right) {'{'}
+        var diff;
+
+        if (left === right) {'{'}
+            return 0;
+        {'}'}
+
+        diff = left - right;
+        if (diff.toString()[0] === '-') {'{'}
+            return 1;
+        {'}'}
+
+        return -1;
+    {'}'}
+
+
+    function getAsciiValue (char) {'{'}
+        return char.charCodeAt(0);
+    {'}'}
+    
+
+    function getWordInAscii(word) {'{'}
+        var sum = 0;
+
+        word
+            .split('')
+            .map(getAsciiValue)
+            .forEach(function (value) {'{'}
+                sum = sum + parseInt(value, 10);
+            {'}'});
+    
+        return sum;
+    {'}'}
+    
+
+
+    function wordComparison(_left, _right) {'{'}
+        var diff;
+        var left = _left.toLowerCase();
+        var right = _right.toLowerCase();
+        var leftValue;
+        var rightValue;
+        var comparison;
+        var index = 0;
+        var equalWords = true;
+        var wordIndex;
+    
+        // check if words are the same (they are both lower case)
+        if (left === right) {'{'}
+            return 0;
+        {'}'}
+    
+        // check if word in contained inside the other
+        comparison = numberComparison(left.length, right.length);
+    
+        if (comparison === -1) {'{'}
+            wordIndex = left.indexOf(right);
+            if (wordIndex !== -1) {'{'}
+                if (wordIndex !== 0) {'{'}
+                    // right word comes first
+                    return 1;
+                {'}'}   
+            {'}'}
+        {'}'} else if (comparison === 1) {'{'}
+            wordIndex = right.indexOf(left);
+            if (wordIndex !== -1) {'{'}
+                if (wordIndex !== 0) {'{'}
+                    // left word comes first
+                    return -1;
+                {'}'}
+            {'}'}
+        {'}'}
+    
+        // compare words
+        // get index where words start to get different
+        while(equalWords) {'{'}
+            if (left[index] !== right[index]) {'{'}
+                equalWords = false;
+            {'}'}
+    
+            index++;
+        {'}'}
+    
+        left = left.substring(0, index);
+        right = right.substring(0, index);
+    
+        leftValue = getWordInAscii(left);
+        rightValue = getWordInAscii(right);
+            
+        return numberComparison(leftValue, rightValue);
+    {'}'}
+
+    /**
+     * Clean filters
+     */
+    function removeNoDisplayClass() {'{'}
+        var $noDisplayElements = $('.noDisplay');
+        $noDisplayElements.removeClass('noDisplay');
+    {'}'}
+
+
+    function getColumnIndex($el) {'{'}
+        return $el.parent().index();
+    {'}'}
+
+
+    function toggleKeyWordFilters() {'{'}
+        $keyWordFilterContainer.toggle();
+    {'}'}
+
+
+    function tableKeyWordFiltering(e) {'{'}
+        var columnIndex;
+        var filterWord = $(this).val().trim();
+        var tdValues;
+
+        // create ESC functionalitly
+        // on ESC press clear the input of the selected field
+        if (e.keyCode === 27) {'{'}
+            $keyWordFilter.val('');
+            removeNoDisplayClass();
+            return;
+        {'}'}
+
+        columnIndex = getColumnIndex($(this));
+
+        // hide relevant tr
+        if (numberComparison(-1, columnIndex) === 1) {'{'}
+            if (filterWord.length === 0) {'{'}
+                removeNoDisplayClass();
+            {'}'} else {'{'}
+                tdValues = $('.' + tableTrs)
+                    .find('td:eq(' + columnIndex + ')')
+                    .each(function () {'{'}
+                        var indexOfCharInFilterWord = $(this).text().trim().indexOf(filterWord);
+
+                        if (indexOfCharInFilterWord === -1) {'{'}
+                            $(this).parent().addClass('noDisplay');
+                        {'}'}
+                    {'}'});
+            {'}'}
+        {'}'}
+    {'}'}
+
+
+    function getSortingOrder($el) {'{'}
+        if ($el.hasClass('arrow-up')) {'{'}
+            $el
+                .removeClass('arrow-up')
+                .addClass('arrow-down')
+                .html(arrowDown);
+            return 1;
+        {'}'}
+
+        $el
+            .removeClass('arrow-down')
+            .addClass('arrow-up')
+            .html(arrowUp);
+        return 2;
+    {'}'}
+
+
+    function isDataNumber($el) {'{'}
+        if ($el.hasClass('data-is-number')) {'{'}
+            return true;
+        {'}'}
+        
+        return false;
+    {'}'}
+
+
+    function getTdValues(columnIndex, isNumber) {'{'}
+        var values = [];
+
+        $('.' + tableTrs)
+            .find('td:eq(' + columnIndex + ')')
+            .each(function(index) {'{'}
+                if (isNumber) {'{'}
+                  values.push({'{'}'index': index, 'value': $(this).text().slice(0, -1).trim(){'}'});
+                {'}'} else {'{'}
+                 values.push({'{'}'index': index, 'value': $(this).text(){'}'}); 
+                {'}'}
+              {'}'});
+        return values;
+    {'}'}
+
+
+    function sortValues(values, isNumber) {'{'}
+        var len = values.length;
+        var temp;
+        var updateValues;
+        var i, j;
+
+        for (i = len - 1 ; numberComparison(-1 , i) ; i--) {'{'}
+            for (j = 1; numberComparison(j , (i + 1)) ; j++) {'{'}
+                updateValues = false;
+
+                if(isNumber) {'{'}
+                    if (numberComparison(parseFloat(values[j].value), parseFloat(values[j-1].value)) === 1) {'{'}
+                        updateValues = true;
+                    {'}'}
+                {'}'} else {'{'}
+                    if (wordComparison(values[j-1].value, values[j].value) === 1) {'{'}
+                        updateValues = true;
+                    {'}'}
+                {'}'}
+
+                if (updateValues) {'{'}
+                    temp = values[j-1];
+                    values[j-1] = values[j];
+                    values[j] = temp;
+                {'}'}
+            {'}'}
+        {'}'}
+
+        return values;
+    {'}'}
+
+
+    function updateTable(values, sortingOrder) {'{'}
+        var trValues = $('.' + tableTrs);
+        var tableBody = $('.' + tableHook + ' tbody');
+        tableBody.empty();
+        
+        if (sortingOrder === 2) {'{'}
+            for (i = (values.length - 1) ; numberComparison(-1, i) ; i--) {'{'}
+                tableBody.append(trValues[values[i].index]);
+            {'}'}
+        {'}'} else {'{'}
+            for (i = 0 ; numberComparison(i, values.length) ; i++) {'{'}
+                tableBody.append(trValues[values[i].index]);
+            {'}'}
+        {'}'}
+    {'}'}
+
+
+    function tableSorting() {'{'}
+        var sortingOrder = 1;
+        var columnIndex;
+        var isNumber;
+        var tdValues;
+        arrowDown = '&#8711;';
+        arrowUp = '&#8710;';
+
+        columnIndex = getColumnIndex($(this));
+        if (numberComparison(columnIndex, -1) === 1) {'{'}
+            return;
+        {'}'}
+
+        sortingOrder = getSortingOrder($(this));        
+        isNumber = isDataNumber($(this));
+        tdValues = getTdValues(columnIndex, isNumber);
+        tdValues = sortValues(tdValues, isNumber);
+        updateTable(tdValues, sortingOrder);
+    {'}'}
+
+    // add sorting event listener 
+    $orderingHook.on('click', tableSorting);
+    // add show key word filters listeners
+    $showKeyWordFilterTag.on('click', toggleKeyWordFilters);
+    // add keystroke event listener
+    $keyWordFilter.on('keyup', tableKeyWordFiltering);
+
+  
+
+  $('.js-table-hook').on('click', '.js-item-trigger', function() {'{'}
+    var address=$(this).find('.js-item-trigger-address').text();
+    var phone=$(this).find('.js-item-trigger-phone').text();
+    // alert(value);
+    $('.js-item-address').val(address);
+    $('.js-item-phone').val(phone);
+
+  {'}'});
+
+
+{'}'})(window);
+
+</script>
+</div>
