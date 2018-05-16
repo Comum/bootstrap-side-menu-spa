@@ -1,0 +1,21 @@
+<html>
+    <body>
+        hello
+
+        <script>
+        
+function htmlDecode(input){
+    var e = document.createElement('div');
+    e.innerHTML = input;
+    return e.childNodes[0].nodeValue;
+}
+  
+  var desanatised = htmlDecode('&lt;div class="someclass"&gt;&lt;blockquote&gt; &lt;p&gt;&quot; ' +
+             'something&quot;&nbsp;here.&lt;/p&gt;Q&lt;/blockquote&gt;');
+
+var htmlDecoded = htmlDecode({str});
+
+console.log(desanatised);
+        </script>
+    </body>
+</html>
